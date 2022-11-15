@@ -6,6 +6,7 @@ public class Game implements Runnable {
 	
 	private Thread thread;
 	private boolean is_running = false;
+	GameWindow gameWindow;
 	
 	
 	public void start() {
@@ -20,7 +21,7 @@ public class Game implements Runnable {
 	}
 	
 	public void initialize() {
-		
+		gameWindow = new GameWindow();
 	}
 	
 	@Override
@@ -69,16 +70,17 @@ public class Game implements Runnable {
 				frames = 0;
 			}
 			
-			
+			is_running = !gameWindow.shouldCloseWindow();
 		}
 	}
 	
 	private void update() {
-		
+		gameWindow.update();
 	}
 	
 	private void render() {
-		
+		gameWindow.render();
+		gameWindow.swapBuffer();
 	}
 
 }
