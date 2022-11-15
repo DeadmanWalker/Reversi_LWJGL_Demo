@@ -7,7 +7,9 @@ import static org.lwjgl.system.MemoryUtil.*;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 
-
+import input.InputCursor;
+import input.InputKB;
+import input.InputMouse;
 
 public class GameWindow {
 	private int width = 1280;
@@ -41,6 +43,10 @@ public class GameWindow {
 		glfwSwapInterval(0);
 		
 		System.out.println("OpenGL: " + glGetString(GL_VERSION));
+		
+		glfwSetKeyCallback(window, new InputKB());
+		glfwSetMouseButtonCallback(window, new InputMouse());
+		glfwSetCursorPosCallback(window, new InputCursor());
 	}
 	
 	public boolean shouldCloseWindow() {
