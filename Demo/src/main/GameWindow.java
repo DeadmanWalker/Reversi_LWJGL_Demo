@@ -12,9 +12,6 @@ import input.InputKB;
 import input.InputMouse;
 
 public class GameWindow {
-	private int width = 1280;
-	private int height = 720;
-	
 	private long window;
 	
 	public GameWindow() {
@@ -25,10 +22,10 @@ public class GameWindow {
 		
 		glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 		glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
-		window = glfwCreateWindow(width, height, "Reversi", NULL, NULL);
+		window = glfwCreateWindow(WindowConstains.WIDTH, WindowConstains.HEIGHT, "Reversi", NULL, NULL);
 		
 		GLFWVidMode vidmodeBuffer = glfwGetVideoMode(glfwGetPrimaryMonitor());
-		glfwSetWindowPos(window, (vidmodeBuffer.width() - width) / 2, (vidmodeBuffer.height() - height) / 2);
+		glfwSetWindowPos(window, (vidmodeBuffer.width() - WindowConstains.WIDTH) / 2, (vidmodeBuffer.height() - WindowConstains.HEIGHT) / 2);
 		
 		glfwMakeContextCurrent(window);
 		GL.createCapabilities();
