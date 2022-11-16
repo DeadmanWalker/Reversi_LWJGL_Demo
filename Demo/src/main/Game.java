@@ -1,13 +1,18 @@
 package main;
 
+import org.lwjgl.glfw.GLFW;
 
+import input.InputMouse;
+import play.Board;
+import ui.Background;
 
 public class Game implements Runnable {
 	
 	private Thread thread;
 	private boolean is_running = false;
 	GameWindow gameWindow;
-	
+	Background gameBG;
+	Board gameBoard;
 	
 	public void start() {
 		is_running = true;
@@ -17,11 +22,15 @@ public class Game implements Runnable {
 	}
 	
 	public void load() {
-		
+		Background.load();
+		Board.load();
 	}
 	
 	public void initialize() {
 		gameWindow = new GameWindow();
+		gameBG = new Background();
+		gameBoard = new Board();
+
 	}
 	
 	@Override
@@ -76,10 +85,20 @@ public class Game implements Runnable {
 	
 	private void update() {
 		gameWindow.update();
+		if(!gameBoard.checkForGameOver())
+			gameBoard.update();
+		else {
+			gameBoard.getWinner();
+			if(InputMouse.click[GLFW.GLFW_MOUSE_BUTTON_LEFT]) {
+				gameBoard.resetPiece();
+			}
+		}
 	}
 	
 	private void render() {
 		gameWindow.render();
+		gameBG.render();
+		gameBoard.render();
 		gameWindow.swapBuffer();
 	}
 
