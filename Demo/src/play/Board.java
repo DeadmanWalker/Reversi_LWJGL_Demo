@@ -22,26 +22,31 @@ import math.Vector3f;
 import meshdata.RectMesh;
 
 public class Board {
-	
 	private VertexArray mesh;
 	private Texture texture;
+	
 	private int cell_size = 20;
 	private int n_col = 8;
 	private int n_row = 8;
+	//Board state
 	private Map<Integer, Piece> cellsMap = new HashMap<>();
 	private Map<Integer, Vector<Integer>> moveMap = new HashMap<>();
+	private Vector<MoveVisualizer> moveVisualizers = new Vector<>();
+	//Players data
 	private Queue<Integer> player_turn = new LinkedList<>();
 	private int last_winner = 0;
 	private boolean isFirstTurn;
-	private Vector<MoveVisualizer> moveVisualizers = new Vector<>();
+	private int[] players_score = {0, 0};
 	private int turns_without_move = 0;
 	
-	private static Shader BOARD_SHADER;
 	private static final int SIZE = 174;
 	private static final int WIDTH = 174;
 	private static final int HEIGHT = 177;
-	private static Map<Integer, Vector3f> direction = new HashMap<>();
 	private static Vector3f position = new Vector3f(640 - (SIZE / 2) * WindowConstains.SIZE_MOD, 270 - (SIZE / 2) * WindowConstains.SIZE_MOD, 0.0f);
+	private static Shader BOARD_SHADER;
+	
+	private static Map<Integer, Vector3f> direction = new HashMap<>();
+	
 	
 	public static void load() {
 		direction.put(1, new Vector3f(-1, 1, 0));
@@ -101,10 +106,11 @@ public class Board {
 		{
 			if(i == 5)
 				continue;
-			
+			Vector3f takeDirect = new Vector3f((i - 1) % 3 - 1, (i - 1) / 3 - 1, 0);
 			Vector3f temp = dehashFunc(hashcode);
-			temp.add(direction.get(i));
+			temp.add(takeDirect);
 			Piece cell = cellsMap.get(hashFunc(temp));
+			Vector<Integer> takeTemp = new Vector<>();
 			if (cellsMap.containsKey(hashFunc(temp)) && cell.getPlayerID() != player_turn.peek()) {
 				while(isInBound(temp)) {
 					if (!(cell != null))
@@ -116,15 +122,16 @@ public class Board {
 							addMoveVisualizer(cellhash);
 						}
 						
-						Vector<Integer> takeDirect = moveMap.get(cellhash);
-						takeDirect.add(i);
+						Vector<Integer> takePtr = moveMap.get(cellhash);
+						takePtr.addAll(takeTemp);
 						break;
 					}
 					else if (cell.getPlayerID() == player_turn.peek())
 					{
 						break;
 					}
-					temp.add(direction.get(i));
+					takeTemp.add(hashFunc(temp));
+					temp.add(takeDirect);
 					cell = cellsMap.get(hashFunc(temp));
 				}
 			}
@@ -138,13 +145,11 @@ public class Board {
 			isFirstTurn = false;
 		}
 		
-		Vector3f mouse_coord = getMouseBoardCoord();
+		Vector3f mouse_coord = tranlatePosToBoardCoord((int)InputCursor.POS_X, (int)InputCursor.POS_Y);
 		
 		if(!moveMap.isEmpty()) {
 			turns_without_move = 0;
 			if(InputMouse.click[GLFW.GLFW_MOUSE_BUTTON_LEFT] && mouse_coord != null) {
-				System.out.println(hashFunc(mouse_coord) + ": " + mouse_coord.x + " " + mouse_coord.y);
-				
 				if(moveMap.get(hashFunc(mouse_coord)) != null) {
 					placePiece(mouse_coord, player_turn.peek());
 					takePieces(mouse_coord);
@@ -197,22 +202,22 @@ public class Board {
 		player_turn.add(temp);
 	}
 	
-	private Vector3f getMouseBoardCoord() {
+	private Vector3f tranlatePosToBoardCoord(int x, int y) {
 		
-		int mouse_to_cell0_x = (int)(InputCursor.POS_X - (position.x + 3 * WindowConstains.SIZE_MOD)) / WindowConstains.SIZE_MOD;
-		int mouse_to_cell0_y = (int)(InputCursor.POS_Y - (position.y + 3 * WindowConstains.SIZE_MOD)) / WindowConstains.SIZE_MOD;
+		int coord_x = (x - ((int)position.x + 3 * WindowConstains.SIZE_MOD)) / WindowConstains.SIZE_MOD;
+		int coord_y = (y - ((int)position.y + 3 * WindowConstains.SIZE_MOD)) / WindowConstains.SIZE_MOD;
 		
-		if(mouse_to_cell0_x >= 0 && mouse_to_cell0_x < (SIZE - 6)
-			&& mouse_to_cell0_y >= 0 && mouse_to_cell0_y < (SIZE - 6)
-			&& mouse_to_cell0_x % (cell_size + 1) != 0
-			&& mouse_to_cell0_y % (cell_size + 1) != 0)
+		if(coord_x >= 0 && coord_x < (SIZE - 6)
+			&& coord_y >= 0 && coord_y < (SIZE - 6)
+			&& coord_x % (cell_size + 1) != 0
+			&& coord_y % (cell_size + 1) != 0)
 		{
-			if(mouse_to_cell0_x > SIZE / 2 - 3)
-				--mouse_to_cell0_x;
-			if(mouse_to_cell0_y > SIZE / 2 - 3)
-				--mouse_to_cell0_y;
+			if(coord_x > SIZE / 2 - 3)
+				--coord_x;
+			if(coord_y > SIZE / 2 - 3)
+				--coord_y;
 			
-			return new Vector3f((mouse_to_cell0_x) / (cell_size + 1), (mouse_to_cell0_y) / (cell_size + 1), 0.0f);
+			return new Vector3f((coord_x) / (cell_size + 1), (coord_y) / (cell_size + 1), 0.0f);
 		} 
 		else {
 			return null;
@@ -223,6 +228,7 @@ public class Board {
 		int hashcode = hashFunc((int)board_coord.x, (int)board_coord.y);
 		Vector3f draw_pos = tranlateHashToDrawPos(hashcode);
 		cellsMap.put(hashcode, new Piece(draw_pos.x, draw_pos.y, id));
+		++players_score[id];
 	}
 	
 	private void addMoveVisualizer(int hashcode) {
@@ -287,21 +293,15 @@ public class Board {
 	
 	private void takePieces(Vector3f board_coord)
 	{
-		Vector<Integer> take_direct = moveMap.get(hashFunc(board_coord));
+		Vector<Integer> take_set = moveMap.get(hashFunc(board_coord));
 
-		for (int i = 0; i < take_direct.size(); ++i)
+		for (int i = 0; i < take_set.size(); ++i)
 		{
-			Vector3f takeVect = new Vector3f(direction.get((int)(take_direct.get(i))));
-			takeVect.multiply(-1);
-			Vector3f temp = Vector3f.ADD(takeVect, board_coord);
-			
-			Piece cell = cellsMap.get(hashFunc(temp));
-			while (cell.getPlayerID() != player_turn.peek())
-			{
-				placePiece(temp, player_turn.peek());
-				temp.add(takeVect);
-				cell = cellsMap.get(hashFunc(temp));
-			}
+			Vector3f temp = dehashFunc(take_set.get(i));
+			placePiece(temp, player_turn.peek());
 		}
+		
+		players_score[player_turn.peek()] += take_set.size();
+		players_score[(player_turn.peek() + 1) % 2] -= take_set.size();
 	}
 }
