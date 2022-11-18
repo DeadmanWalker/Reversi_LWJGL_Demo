@@ -33,5 +33,6 @@ public class StateManager {
 	
 	public void popState() {
 		states.pop();
+		cd_counter = transition_cooldown;
 	}
 }
