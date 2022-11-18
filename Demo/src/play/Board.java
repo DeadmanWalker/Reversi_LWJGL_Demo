@@ -84,7 +84,7 @@ public class Board {
 	
 	public void resetPiece() {
 		player_turn.clear();
-		if(last_winner == 2) {
+		if(last_winner == -1) {
 			last_winner = (int)Math.random() % 2;
 		}
 		player_turn.add((last_winner + 1) % 2);
@@ -173,22 +173,15 @@ public class Board {
 	}
 	
 	private void checkForWinner() {
-		int count = 0;
-		Iterator<Map.Entry<Integer, Piece>> i = cellsMap.entrySet().iterator();
-		while (i.hasNext()) {
-			Map.Entry<Integer, Piece> pair = (Map.Entry<Integer, Piece>)i.next();
-			if(pair.getValue().getPlayerID() == 0)
-				++count;
-		}
 		
-		if(count > cellsMap.size() / 2) {
+		if(players_score[0] > players_score[1]) {
 			last_winner = 0;
 		}
-		else if (count < cellsMap.size() / 2) {
+		else if (players_score[0] < players_score[1]) {
 			last_winner = 1;
 		}
 		else {
-			last_winner = 2;
+			last_winner = -1;
 		}
 	}
 	
@@ -303,5 +296,9 @@ public class Board {
 		
 		players_score[player_turn.peek()] += take_set.size();
 		players_score[(player_turn.peek() + 1) % 2] -= take_set.size();
+	}
+	
+	public int[] getScores() {
+		return players_score;
 	}
 }
