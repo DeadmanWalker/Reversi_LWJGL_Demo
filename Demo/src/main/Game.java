@@ -1,7 +1,6 @@
 package main;
 
 import gamestate.MainScreen;
-import gamestate.Playing;
 import gamestate.StateManager;
 import play.Board;
 import ui.Background;
