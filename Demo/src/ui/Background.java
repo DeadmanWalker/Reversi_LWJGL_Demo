@@ -3,6 +3,7 @@ package ui;
 import graphics.Shader;
 import graphics.Texture;
 import graphics.VertexArray;
+import main.WindowConstains;
 import meshdata.RectMesh;
 
 import static org.lwjgl.opengl.GL13.*;
@@ -23,7 +24,7 @@ public class Background {
 	}
 	
 	public Background() {
-		RectMesh rect = new RectMesh(1280, 720, 0.0f);
+		RectMesh rect = new RectMesh(WindowConstains.WIDTH / WindowConstains.SIZE_MOD, WindowConstains.HEIGHT / WindowConstains.SIZE_MOD, 0.0f);
 		
 		background = new VertexArray(rect.getVetices(), rect.getIndices(), rect.getTextureCoords());
 		bgTexture = new Texture("res/bg.png");

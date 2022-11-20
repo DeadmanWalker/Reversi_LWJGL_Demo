@@ -25,7 +25,7 @@ public class Piece {
 	public static Shader PIECE_SHADER;
 	
 	public static void create() {
-		RectMesh rect = new RectMesh((SIZE) * WindowConstains.SIZE_MOD, (SIZE) * WindowConstains.SIZE_MOD, 0.2f);
+		RectMesh rect = new RectMesh(SIZE, SIZE, 0.2f);
 		
 		mesh = new VertexArray(rect.getVetices(), rect.getIndices(), rect.getTextureCoords());
 	}

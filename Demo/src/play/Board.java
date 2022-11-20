@@ -43,7 +43,7 @@ public class Board {
 	private static final int SIZE = texture.getWidth();
 	private static final int WIDTH = texture.getWidth();
 	private static final int HEIGHT = texture.getHeight();
-	private static Vector3f position = new Vector3f(640 - (SIZE / 2) * WindowConstains.SIZE_MOD, 270 - (SIZE / 2) * WindowConstains.SIZE_MOD, 0.0f);
+	private static Vector3f position = new Vector3f((WindowConstains.WIDTH / 2) / WindowConstains.SIZE_MOD - (SIZE / 2), (  WindowConstains.HEIGHT / 8) / WindowConstains.SIZE_MOD, 0.0f);
 	private static Shader BOARD_SHADER;
 	
 	private static Map<Integer, Vector3f> direction = new HashMap<>();
@@ -73,7 +73,7 @@ public class Board {
 	
 	public Board() {
 		
-		RectMesh rect = new RectMesh((WIDTH) * WindowConstains.SIZE_MOD, (HEIGHT) * WindowConstains.SIZE_MOD, 0.1f);
+		RectMesh rect = new RectMesh(WIDTH, HEIGHT, 0.1f);
 		
 		mesh = new VertexArray(rect.getVetices(), rect.getIndices(), rect.getTextureCoords());
 		ghost_piece = new Piece(tranlateHashToDrawPos(0).x, tranlateHashToDrawPos(0).y, 1);
@@ -97,7 +97,7 @@ public class Board {
 				cellsMap.put(hashcode, new Piece(draw_pos.x, draw_pos.y, (i + j) % 2));
 			}
 		}
-		ghost_piece.setPos(tranlateHashToDrawPos(0).x, tranlateHashToDrawPos(0).y - cell_size * WindowConstains.SIZE_MOD / 2, player_turn.peek());
+		ghost_piece.setPos(tranlateHashToDrawPos(0).x, tranlateHashToDrawPos(0).y - cell_size / 2, player_turn.peek());
 		updateMove();
 	}
 	
@@ -164,7 +164,7 @@ public class Board {
 	private void setGhostPiecePos(Vector3f selected_coord) {
 		if(selected_coord != null) {
 			ghost_piece_pos = tranlateHashToDrawPos(hashFunc(selected_coord));
-			ghost_piece_pos.y = ghost_piece_pos.y - (cell_size * WindowConstains.SIZE_MOD) / 2; 
+			ghost_piece_pos.y = ghost_piece_pos.y - cell_size / 2; 
 			ghost_piece.setPos(ghost_piece_pos.x, ghost_piece_pos.y, player_turn.peek());
 		}
 	}
@@ -202,8 +202,8 @@ public class Board {
 	
 	private Vector3f tranlatePosToBoardCoord(int x, int y) {
 		
-		int coord_x = (x - ((int)position.x + 3 * WindowConstains.SIZE_MOD)) / WindowConstains.SIZE_MOD;
-		int coord_y = (y - ((int)position.y + 3 * WindowConstains.SIZE_MOD)) / WindowConstains.SIZE_MOD;
+		int coord_x = x - ((int)position.x + 3);
+		int coord_y = y - ((int)position.y + 3);
 		
 		if(coord_x >= 0 && coord_x < (SIZE - 6)
 			&& coord_y >= 0 && coord_y < (SIZE - 6)
@@ -270,13 +270,13 @@ public class Board {
 	private Vector3f tranlateHashToDrawPos(int hashcode) {
 		Vector3f board_coord = dehashFunc(hashcode);
 		
-		float pos_x = position.x + (3 + board_coord.x * (cell_size + 1)) * WindowConstains.SIZE_MOD;
-		float pos_y = position.y + (3 + board_coord.y * (cell_size + 1)) * WindowConstains.SIZE_MOD;
+		float pos_x = position.x + (3 + board_coord.x * (cell_size + 1));
+		float pos_y = position.y + (3 + board_coord.y * (cell_size + 1));
 		
 		if(board_coord.x >= n_col / 2)
-			pos_x += 1 * WindowConstains.SIZE_MOD;
+			++pos_x;
 		if(board_coord.y >= n_row / 2)
-			pos_y += 1 * WindowConstains.SIZE_MOD;
+			++pos_y;
 		return new Vector3f(pos_x, pos_y, 0.0f);
 	}
 	

@@ -17,7 +17,7 @@ public class Shader {
 	
 	public static Shader BG_SHADER;
 	
-	public static Matrix4f pr_matrix = Matrix4f.orthographic(0.0f, WindowConstains.WIDTH, WindowConstains.HEIGHT, 0.0f, -1.0f, 1.0f);
+	public static Matrix4f pr_matrix = Matrix4f.orthographic(0.0f, WindowConstains.WIDTH / WindowConstains.SIZE_MOD, WindowConstains.HEIGHT / WindowConstains.SIZE_MOD, 0.0f, -1.0f, 1.0f);
 	
 	private final int ID;
 	private Map<String, Integer> locationCache = new HashMap<String, Integer>();

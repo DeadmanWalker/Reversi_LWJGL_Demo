@@ -19,13 +19,12 @@ public class MoveVisualizer {
 	
 	private static Texture texture = new Texture("res/move.png");
 	private static int size = texture.getWidth();
-	private static int size_mod = WindowConstains.SIZE_MOD;
 	private static VertexArray mesh;
 	
 	public static Shader MOVE_SHADER;
 	
 	public static void create() {
-		RectMesh rect = new RectMesh((size) * size_mod, (size) * size_mod, 0.2f);
+		RectMesh rect = new RectMesh((size), (size), 0.2f);
 		
 		mesh = new VertexArray(rect.getVetices(), rect.getIndices(), rect.getTextureCoords());
 	}

@@ -5,6 +5,7 @@ import gamestate.StateManager;
 import play.Board;
 import ui.Announcements;
 import ui.Background;
+import ui.NumbersTexture;
 
 public class Game implements Runnable {
 	StateManager gameStateManager;
@@ -25,6 +26,7 @@ public class Game implements Runnable {
 		Background.load();
 		Board.load();
 		Announcements.load();
+		NumbersTexture.load();
 	}
 	
 	public void initialize() {
