@@ -19,7 +19,7 @@ public class Piece {
 			new Texture("res/piece/white_piece.png"),
 			new Texture("res/piece/black_piece.png")
 	};
-	private static final int SIZE = 20;
+	private static final int SIZE = texture[0].getWidth();
 	private static VertexArray mesh;
 	
 	public static Shader PIECE_SHADER;

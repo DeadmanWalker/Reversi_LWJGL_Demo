@@ -8,6 +8,7 @@ import static org.lwjgl.opengl.GL13.glActiveTexture;
 import graphics.Shader;
 import graphics.Texture;
 import graphics.VertexArray;
+import main.WindowConstains;
 import math.Matrix4f;
 import math.Vector3f;
 import meshdata.RectMesh;
@@ -17,8 +18,8 @@ public class MoveVisualizer {
 	private Matrix4f ml_matrix;
 	
 	private static Texture texture = new Texture("res/move.png");
-	private static int size = 20;
-	private static int size_mod = 2;
+	private static int size = texture.getWidth();
+	private static int size_mod = WindowConstains.SIZE_MOD;
 	private static VertexArray mesh;
 	
 	public static Shader MOVE_SHADER;
