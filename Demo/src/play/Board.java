@@ -22,7 +22,6 @@ import meshdata.RectMesh;
 
 public class Board {
 	private VertexArray mesh;
-	private Texture texture;
 	
 	private int cell_size = 20;
 	private int n_col = 8;
@@ -34,13 +33,13 @@ public class Board {
 	//Players data
 	private Queue<Integer> player_turn = new LinkedList<>();
 	private int last_winner = 0;
-	private boolean isFirstTurn;
 	private int[] players_score = {0, 0};
 	private int turns_without_move = 0;
 	
-	private static final int SIZE = 174;
-	private static final int WIDTH = 174;
-	private static final int HEIGHT = 177;
+	private static Texture texture = new Texture("res/board.png");
+	private static final int SIZE = texture.getWidth();
+	private static final int WIDTH = texture.getWidth();
+	private static final int HEIGHT = texture.getHeight();
 	private static Vector3f position = new Vector3f(640 - (SIZE / 2) * WindowConstains.SIZE_MOD, 270 - (SIZE / 2) * WindowConstains.SIZE_MOD, 0.0f);
 	private static Shader BOARD_SHADER;
 	
@@ -74,7 +73,6 @@ public class Board {
 		RectMesh rect = new RectMesh((WIDTH) * WindowConstains.SIZE_MOD, (HEIGHT) * WindowConstains.SIZE_MOD, 0.1f);
 		
 		mesh = new VertexArray(rect.getVetices(), rect.getIndices(), rect.getTextureCoords());
-		texture = new Texture("res/board.png");
 		
 		Piece.create();
 		MoveVisualizer.create();
@@ -96,7 +94,7 @@ public class Board {
 				cellsMap.put(hashcode, new Piece(draw_pos.x, draw_pos.y, (i + j) % 2));
 			}
 		}
-		isFirstTurn = true;
+		updateMove();
 	}
 	
 	private void checkForMove(int hashcode)
@@ -138,11 +136,6 @@ public class Board {
 	}
 	
 	public void update() {
-		
-		if(isFirstTurn) {
-			updateMove();
-			isFirstTurn = false;
-		}
 		
 		Vector3f mouse_coord = tranlatePosToBoardCoord((int)InputCursor.POS_X, (int)InputCursor.POS_Y);
 		
