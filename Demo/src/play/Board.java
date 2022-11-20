@@ -249,11 +249,10 @@ public class Board {
 		BOARD_SHADER.disable();
 		texture.unbind();
 		
+		if(!InputMouse.click[GLFW.GLFW_MOUSE_BUTTON_LEFT] )
 		ghost_piece.render();
 		renderPiece();
-		
-		if(!InputMouse.click[GLFW.GLFW_MOUSE_BUTTON_LEFT])
-			renderMove();
+		renderMove();
 	}
 	
 	private int hashFunc(int col, int row) {
