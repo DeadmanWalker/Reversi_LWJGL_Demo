@@ -70,4 +70,11 @@ public class Piece {
 		PIECE_SHADER.disable();
 		texture[playerID].unbind();
 	}
+	
+	public void setPos(float x, float y, int id) {
+		pos.x = x;
+		pos.y = y;
+		ml_matrix = Matrix4f.translate(pos);
+		this.playerID = id;
+	}
 }

@@ -30,11 +30,14 @@ public class Board {
 	private Map<Integer, Piece> cellsMap = new HashMap<>();
 	private Map<Integer, Vector<Integer>> moveMap = new HashMap<>();
 	private Vector<MoveVisualizer> moveVisualizers = new Vector<>();
+	private Piece ghost_piece;
+	private Vector3f ghost_piece_pos;
 	//Players data
 	private Queue<Integer> player_turn = new LinkedList<>();
 	private int last_winner = 0;
 	private int[] players_score = {0, 0};
 	private int turns_without_move = 0;
+	
 	
 	private static Texture texture = new Texture("res/board.png");
 	private static final int SIZE = texture.getWidth();
@@ -73,7 +76,7 @@ public class Board {
 		RectMesh rect = new RectMesh((WIDTH) * WindowConstains.SIZE_MOD, (HEIGHT) * WindowConstains.SIZE_MOD, 0.1f);
 		
 		mesh = new VertexArray(rect.getVetices(), rect.getIndices(), rect.getTextureCoords());
-		
+		ghost_piece = new Piece(tranlateHashToDrawPos(0).x, tranlateHashToDrawPos(0).y, 1);
 		Piece.create();
 		MoveVisualizer.create();
 		resetPiece();
@@ -94,6 +97,7 @@ public class Board {
 				cellsMap.put(hashcode, new Piece(draw_pos.x, draw_pos.y, (i + j) % 2));
 			}
 		}
+		ghost_piece.setPos(tranlateHashToDrawPos(0).x, tranlateHashToDrawPos(0).y - cell_size * WindowConstains.SIZE_MOD / 2, player_turn.peek());
 		updateMove();
 	}
 	
@@ -137,14 +141,15 @@ public class Board {
 	
 	public void update() {
 		
-		Vector3f mouse_coord = tranlatePosToBoardCoord((int)InputCursor.POS_X, (int)InputCursor.POS_Y);
+		Vector3f selected_coord = tranlatePosToBoardCoord((int)InputCursor.POS_X, (int)InputCursor.POS_Y);
+		setGhostPiecePos(selected_coord);
 		
 		if(!moveMap.isEmpty()) {
 			turns_without_move = 0;
-			if(InputMouse.click[GLFW.GLFW_MOUSE_BUTTON_LEFT] && mouse_coord != null) {
-				if(moveMap.get(hashFunc(mouse_coord)) != null) {
-					placePiece(mouse_coord, player_turn.peek());
-					takePieces(mouse_coord);
+			if(InputMouse.click[GLFW.GLFW_MOUSE_BUTTON_LEFT] && selected_coord != null) {
+				if(moveMap.get(hashFunc(selected_coord)) != null) {
+					placePiece(selected_coord, player_turn.peek());
+					takePieces(selected_coord);
 					nextTurn();
 					updateMove();
 				}
@@ -153,6 +158,14 @@ public class Board {
 		else {
 			nextTurn();
 			++turns_without_move;
+		}
+	}
+	
+	private void setGhostPiecePos(Vector3f selected_coord) {
+		if(selected_coord != null) {
+			ghost_piece_pos = tranlateHashToDrawPos(hashFunc(selected_coord));
+			ghost_piece_pos.y = ghost_piece_pos.y - (cell_size * WindowConstains.SIZE_MOD) / 2; 
+			ghost_piece.setPos(ghost_piece_pos.x, ghost_piece_pos.y, player_turn.peek());
 		}
 	}
 	
@@ -236,8 +249,11 @@ public class Board {
 		BOARD_SHADER.disable();
 		texture.unbind();
 		
+		ghost_piece.render();
 		renderPiece();
-		renderMove();
+		
+		if(!InputMouse.click[GLFW.GLFW_MOUSE_BUTTON_LEFT])
+			renderMove();
 	}
 	
 	private int hashFunc(int col, int row) {
