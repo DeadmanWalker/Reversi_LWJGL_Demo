@@ -1,8 +1,5 @@
 package gamestate;
 
-import org.lwjgl.glfw.GLFW;
-
-import input.InputMouse;
 import play.Board;
 
 public class Playing extends GameState {
@@ -22,10 +19,7 @@ public class Playing extends GameState {
 		if(!gameBoard.checkForGameOver())
 			gameBoard.update();
 		else {
-			gameBoard.getWinner();
-			if(InputMouse.click[GLFW.GLFW_MOUSE_BUTTON_LEFT]) {
-				gameBoard.resetPiece();
-			}
+			gsm.pushState(new GameOver(gsm, gameBoard));
 		}
 	}
 

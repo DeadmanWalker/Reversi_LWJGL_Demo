@@ -3,6 +3,7 @@ package main;
 import gamestate.MainScreen;
 import gamestate.StateManager;
 import play.Board;
+import ui.Announcements;
 import ui.Background;
 
 public class Game implements Runnable {
@@ -23,6 +24,7 @@ public class Game implements Runnable {
 	public void load() {
 		Background.load();
 		Board.load();
+		Announcements.load();
 	}
 	
 	public void initialize() {
