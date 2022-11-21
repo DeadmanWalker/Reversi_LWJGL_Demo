@@ -3,9 +3,9 @@ package main;
 import gamestate.MainScreen;
 import gamestate.StateManager;
 import play.Board;
-import play.ScoreDisplay;
 import ui.Announcements;
 import ui.Background;
+import ui.Button;
 import ui.Numbers;
 
 public class Game implements Runnable {
@@ -28,6 +28,7 @@ public class Game implements Runnable {
 		Board.load();
 		Announcements.load();
 		Numbers.load();
+		Button.load();
 	}
 	
 	public void initialize() {
@@ -83,7 +84,7 @@ public class Game implements Runnable {
 				frames = 0;
 			}
 			
-			is_running = !gameWindow.shouldCloseWindow();
+			is_running = !gameWindow.shouldCloseWindow() && !gameStateManager.isEmpty();
 		}
 	}
 	

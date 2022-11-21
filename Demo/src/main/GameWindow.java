@@ -22,7 +22,7 @@ public class GameWindow {
 		
 		glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 		glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
-		window = glfwCreateWindow(WindowConstains.WIDTH, WindowConstains.HEIGHT, "Reversi", NULL, NULL);
+		window = glfwCreateWindow(WindowConstains.WIDTH, WindowConstains.HEIGHT, "Othello", NULL, NULL);
 		
 		GLFWVidMode vidmodeBuffer = glfwGetVideoMode(glfwGetPrimaryMonitor());
 		glfwSetWindowPos(window, (vidmodeBuffer.width() - WindowConstains.WIDTH) / 2, (vidmodeBuffer.height() - WindowConstains.HEIGHT) / 2);

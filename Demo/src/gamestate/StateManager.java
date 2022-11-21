@@ -35,4 +35,8 @@ public class StateManager {
 		states.pop();
 		cd_counter = transition_cooldown;
 	}
+	
+	public boolean isEmpty() {
+		return states.isEmpty();
+	}
 }

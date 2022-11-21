@@ -1,11 +1,15 @@
 package gamestate;
 
-import org.lwjgl.glfw.GLFW;
-
-import input.InputKB;
-import input.InputMouse;
+import main.WindowConstains;
+import math.Vector3f;
+import ui.Button;
 
 public class MainScreen extends GameState{
+	
+	private Button[] buttons = new Button[] {
+			new Button(new Vector3f((WindowConstains.WIDTH / WindowConstains.SIZE_MOD - 126) / 2, 3 * (WindowConstains.HEIGHT / WindowConstains.SIZE_MOD) / 5, 0), "res/buttons/play_button.png"),
+			new Button(new Vector3f((WindowConstains.WIDTH / WindowConstains.SIZE_MOD - 116) / 2, 3 * (WindowConstains.HEIGHT / WindowConstains.SIZE_MOD) / 5 + 50, 0), "res/buttons/quit_button.png")
+	};
 
 	public MainScreen(StateManager gsm) {
 		super(gsm, false);
@@ -13,22 +17,24 @@ public class MainScreen extends GameState{
 
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
-		if(InputKB.click[GLFW.GLFW_KEY_SPACE] || InputMouse.click[GLFW.GLFW_MOUSE_BUTTON_LEFT]) {
+		if(buttons[0].isClick()) {
+			gsm.popState();
 			gsm.pushState(new Playing(gsm));
+		}
+		if(buttons[1].isClick()) {
+			gsm.popState();
 		}
 	}
 
 	@Override
 	public void render() {
-		// TODO Auto-generated method stub
-		
+		buttons[0].render();
+		buttons[1].render();
 	}
 
 }
