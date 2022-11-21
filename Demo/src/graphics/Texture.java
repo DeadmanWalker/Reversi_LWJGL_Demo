@@ -25,7 +25,6 @@ public class Texture {
 			pixels = new int[width * height];
 			image.getRGB(0, 0, width, height, pixels, 0, width);
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		int[] data = new int[width * height];
@@ -47,6 +46,34 @@ public class Texture {
 		return result;
 	}
 	
+	public Texture(BufferedImage img) {
+		texture = load(img);
+	}
+	
+	private int load(BufferedImage img) {
+		width = img.getWidth();
+		height = img.getHeight();
+		int[] pixels = new int[width * height];
+		img.getRGB(0, 0, width, height, pixels, 0, width);
+		int[] data = new int[width * height];
+		for(int i = 0; i < width * height; ++i) {
+			int a = (pixels[i] & 0xff000000) >> 24;
+			int r = (pixels[i] & 0xff0000) >> 16;
+			int g = (pixels[i] & 0xff00) >> 8;
+			int b = (pixels[i] & 0xff);
+			
+			data[i] = a << 24 | b << 16 | g << 8 | r;
+		}
+		
+		int result = glGenTextures();
+		glBindTexture(GL_TEXTURE_2D, result);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, BufferUtils.createIntBuffer(data));
+		glBindTexture(GL_TEXTURE_2D, 0);
+		return result;
+	}
+
 	public void bind() {
 		glBindTexture(GL_TEXTURE_2D, texture);
 	}
