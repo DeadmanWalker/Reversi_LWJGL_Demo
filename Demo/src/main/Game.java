@@ -5,6 +5,7 @@ import gamestate.StateManager;
 import play.Board;
 import ui.Announcements;
 import ui.Background;
+import ui.Banner;
 import ui.Button;
 import ui.Numbers;
 
@@ -29,6 +30,7 @@ public class Game implements Runnable {
 		Announcements.load();
 		Numbers.load();
 		Button.load();
+		Banner.load();
 	}
 	
 	public void initialize() {

@@ -2,6 +2,7 @@ package gamestate;
 
 import main.WindowConstains;
 import math.Vector3f;
+import ui.Banner;
 import ui.Button;
 
 public class MainScreen extends GameState{
@@ -35,6 +36,7 @@ public class MainScreen extends GameState{
 	public void render() {
 		buttons[0].render();
 		buttons[1].render();
+		Banner.render();
 	}
 
 }
