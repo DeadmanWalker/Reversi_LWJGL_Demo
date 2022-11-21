@@ -8,7 +8,6 @@ import static org.lwjgl.opengl.GL13.glActiveTexture;
 import graphics.Shader;
 import graphics.Texture;
 import graphics.VertexArray;
-import main.WindowConstains;
 import math.Matrix4f;
 import math.Vector3f;
 import meshdata.RectMesh;

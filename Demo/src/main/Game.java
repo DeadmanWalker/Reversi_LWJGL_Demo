@@ -3,9 +3,10 @@ package main;
 import gamestate.MainScreen;
 import gamestate.StateManager;
 import play.Board;
+import play.ScoreDisplay;
 import ui.Announcements;
 import ui.Background;
-import ui.NumbersTexture;
+import ui.Numbers;
 
 public class Game implements Runnable {
 	StateManager gameStateManager;
@@ -26,7 +27,7 @@ public class Game implements Runnable {
 		Background.load();
 		Board.load();
 		Announcements.load();
-		NumbersTexture.load();
+		Numbers.load();
 	}
 	
 	public void initialize() {

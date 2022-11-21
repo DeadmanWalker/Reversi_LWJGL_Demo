@@ -3,7 +3,6 @@ package play;
 import graphics.Shader;
 import graphics.Texture;
 import graphics.VertexArray;
-import main.WindowConstains;
 import math.Matrix4f;
 import math.Vector3f;
 import meshdata.RectMesh;
@@ -46,20 +45,12 @@ public class Piece {
 		this.playerID = player_ID;
 	}
 	
-	public static VertexArray getMesh() {
-		return mesh;
-	}
-	
-	public Texture getTexture() {
-		return texture[playerID];
-	}
-	
 	public int getPlayerID() {
 		return playerID;
 	}
 	
-	public Matrix4f getMl_matrix() {
-		return ml_matrix;
+	public static int getSize() {
+		return SIZE;
 	}
 	
 	public void render() {
