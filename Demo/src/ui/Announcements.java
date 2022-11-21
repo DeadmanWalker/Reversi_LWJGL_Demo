@@ -33,7 +33,7 @@ public class Announcements {
 			player_mesh[i] = new VertexArray(rect.getVetices(), rect.getIndices(), rect.getTextureCoords());
 		}
 		
-		RectMesh drawRect = new RectMesh(draw_tex.getWidth() * 2, draw_tex.getWidth() * 2, 0.4f);
+		RectMesh drawRect = new RectMesh(draw_tex.getWidth() * 2, draw_tex.getHeight() * 2, 0.4f);
 		draw_mesh = new VertexArray(drawRect.getVetices(), drawRect.getIndices(), drawRect.getTextureCoords());
 		
 		RectMesh winsRect = new RectMesh(wins_tex.getWidth() * 2, wins_tex.getHeight() * 2, 0.4f);
