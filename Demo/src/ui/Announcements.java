@@ -53,12 +53,12 @@ public class Announcements {
 		if(winner != -1) {
 			ANNOUNCE_SHADER.enable();
 			player[winner].bind();
-			ml_matrix = Matrix4f.translate(new Vector3f((WindowConstains.WIDTH - player[winner].getWidth() * 2) / 2, WindowConstains.HEIGHT * 1 / 3, 0.0f));
+			ml_matrix = Matrix4f.translate(new Vector3f((WindowConstains.WIDTH / WindowConstains.SIZE_MOD - player[winner].getWidth() * 2) / 2, WindowConstains.HEIGHT / WindowConstains.SIZE_MOD * 1 / 3, 0.0f));
 			ANNOUNCE_SHADER.setUniformMat4f("ml_matrix", ml_matrix);
 			player_mesh[winner].render();
 			player[winner].unbind();
 			wins_tex.bind();
-			ml_matrix = Matrix4f.translate(new Vector3f((WindowConstains.WIDTH - wins_tex.getWidth() * 2) / 2, WindowConstains.HEIGHT * 1 / 3 + (player[winner].getHeight() + 2) * (WindowConstains.SIZE_MOD + 1), 0.0f));
+			ml_matrix = Matrix4f.translate(new Vector3f((WindowConstains.WIDTH / WindowConstains.SIZE_MOD - wins_tex.getWidth() * 2) / 2, WindowConstains.HEIGHT / WindowConstains.SIZE_MOD * 1 / 3 + (player[winner].getHeight() + 2) * (WindowConstains.SIZE_MOD + 1), 0.0f));
 			ANNOUNCE_SHADER.setUniformMat4f("ml_matrix", ml_matrix);
 			wins_mesh.render();
 			wins_tex.unbind();
@@ -67,7 +67,7 @@ public class Announcements {
 		else {
 			ANNOUNCE_SHADER.enable();
 			draw_tex.bind();
-			ml_matrix = Matrix4f.translate(new Vector3f((WindowConstains.WIDTH - draw_tex.getWidth() * 2) / 2, WindowConstains.HEIGHT * 1 / 3, 0.0f));
+			ml_matrix = Matrix4f.translate(new Vector3f((WindowConstains.WIDTH / WindowConstains.SIZE_MOD - draw_tex.getWidth() * 2) / 2, WindowConstains.HEIGHT / WindowConstains.SIZE_MOD * 1 / 3, 0.0f));
 			ANNOUNCE_SHADER.setUniformMat4f("ml_matrix", ml_matrix);
 			draw_mesh.render();
 			draw_tex.unbind();

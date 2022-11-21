@@ -83,7 +83,10 @@ public class Board {
 	}
 	
 	public void resetPiece() {
+		
 		player_turn.clear();
+		players_score[0] = 0;
+		players_score[1] = 0;
 		if(last_winner == -1) {
 			last_winner = (int)Math.random() % 2;
 		}
