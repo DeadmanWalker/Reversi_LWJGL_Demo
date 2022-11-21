@@ -92,9 +92,7 @@ public class Board {
 		cellsMap.clear();
 		for(int i = n_col / 2 - 1; i <= n_col / 2; ++i) {
 			for(int j = n_row / 2 - 1; j <= n_row / 2; ++j) {
-				int hashcode = hashFunc(i, j);
-				Vector3f draw_pos = tranlateHashToDrawPos(hashcode);
-				cellsMap.put(hashcode, new Piece(draw_pos.x, draw_pos.y, (i + j) % 2));
+				placePiece(new Vector3f(i, j, 0), (i + j) % 2);
 			}
 		}
 		ghost_piece.setPos(tranlateHashToDrawPos(0).x, tranlateHashToDrawPos(0).y - cell_size / 2, player_turn.peek());
@@ -300,8 +298,6 @@ public class Board {
 			Vector3f temp = dehashFunc(take_set.get(i));
 			placePiece(temp, player_turn.peek());
 		}
-		
-		players_score[player_turn.peek()] += take_set.size();
 		players_score[(player_turn.peek() + 1) % 2] -= take_set.size();
 	}
 	
