@@ -1,7 +1,5 @@
 package play;
 
-import static org.lwjgl.opengl.GL11.GL_NO_ERROR;
-import static org.lwjgl.opengl.GL11.glGetError;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE1;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
 
@@ -43,18 +41,6 @@ public class MoveVisualizer {
 		ml_matrix = Matrix4f.translate(pos);
 	}
 	
-	public static VertexArray getMesh() {
-		return mesh;
-	}
-	
-	public Texture getTexture() {
-		return texture;
-	}
-	
-	public Matrix4f getMl_matrix() {
-		return ml_matrix;
-	}
-	
 	public void render() {
 		texture.bind();
 		MOVE_SHADER.enable();
@@ -62,10 +48,5 @@ public class MoveVisualizer {
 		mesh.render();
 		MOVE_SHADER.disable();
 		texture.unbind();
-		
-		int error = glGetError();
-		if(error != GL_NO_ERROR) {
-			System.out.println(error);
-		}
 	}
 }

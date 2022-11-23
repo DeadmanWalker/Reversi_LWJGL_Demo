@@ -21,7 +21,7 @@ public class Piece {
 	private static final int SIZE = texture[0].getWidth();
 	private static VertexArray mesh;
 	
-	public static Shader PIECE_SHADER;
+	private static Shader PIECE_SHADER;
 	
 	public static void create() {
 		RectMesh rect = new RectMesh(SIZE, SIZE, 0.2f);

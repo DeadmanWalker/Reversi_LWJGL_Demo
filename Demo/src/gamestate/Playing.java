@@ -7,9 +7,9 @@ import play.ScoreDisplay;
 import ui.Button;
 
 public class Playing extends GameState {
-	Board gameBoard;
-	ScoreDisplay sc_display;
-	Button backButton;
+	private Board gameBoard;
+	private ScoreDisplay sc_display;
+	private Button backButton;
 	
 	public Playing(StateManager gsm) {
 		super(gsm, false);

@@ -39,4 +39,8 @@ public class StateManager {
 	public boolean isEmpty() {
 		return states.isEmpty();
 	}
+	
+	public void clear() {
+		states.clear();
+	}
 }

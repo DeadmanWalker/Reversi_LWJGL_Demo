@@ -28,7 +28,7 @@ public class MainScreen extends GameState{
 			gsm.pushState(new Playing(gsm));
 		}
 		if(buttons[1].isClick()) {
-			gsm.popState();
+			gsm.clear();
 		}
 	}
 

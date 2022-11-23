@@ -3,11 +3,11 @@ package play;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE1;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Vector;
+import java.util.WeakHashMap;
 
 import org.lwjgl.glfw.GLFW;
 import graphics.Shader;
@@ -23,12 +23,12 @@ import meshdata.RectMesh;
 public class Board {
 	private VertexArray mesh;
 	
-	private int cell_size = 20;
+	private int cell_size = Piece.getSize();
 	private int n_col = 8;
 	private int n_row = 8;
 	//Board state
-	private Map<Integer, Piece> cellsMap = new HashMap<>();
-	private Map<Integer, Vector<Integer>> moveMap = new HashMap<>();
+	private Map<Integer, Piece> cellsMap = new WeakHashMap<>();
+	private Map<Integer, Vector<Integer>> moveMap = new WeakHashMap<>();
 	private Vector<MoveVisualizer> moveVisualizers = new Vector<>();
 	private Piece ghost_piece;
 	private Vector3f ghost_piece_pos;
@@ -46,18 +46,8 @@ public class Board {
 	private static Vector3f position = new Vector3f((WindowConstains.WIDTH / 2) / WindowConstains.SIZE_MOD - (SIZE / 2), (  WindowConstains.HEIGHT / 8) / WindowConstains.SIZE_MOD, 0.0f);
 	private static Shader BOARD_SHADER;
 	
-	private static Map<Integer, Vector3f> direction = new HashMap<>();
-	
 	
 	public static void load() {
-		direction.put(1, new Vector3f(-1, 1, 0));
-		direction.put(2, new Vector3f(0, 1, 0));
-		direction.put(3, new Vector3f(1, 1, 0));
-		direction.put(4, new Vector3f(-1, 0, 0));
-		direction.put(6, new Vector3f(1, 0, 0));
-		direction.put(7, new Vector3f(-1, -1, 0));
-		direction.put(8, new Vector3f(0, -1, 0));
-		direction.put(9, new Vector3f(1, -1, 0));
 		
 		glActiveTexture(GL_TEXTURE1);
 		BOARD_SHADER = new Shader("shaders/board.vert", "shaders/board.frag");
@@ -301,6 +291,7 @@ public class Board {
 		for (int i = 0; i < take_set.size(); ++i)
 		{
 			Vector3f temp = dehashFunc(take_set.get(i));
+			cellsMap.remove(take_set.get(i));
 			placePiece(temp, player_turn.peek());
 		}
 		players_score[(player_turn.peek() + 1) % 2] -= take_set.size();

@@ -10,21 +10,20 @@ import ui.Button;
 import ui.Numbers;
 
 public class Game implements Runnable {
-	StateManager gameStateManager;
+	private StateManager gameStateManager;
 	private Thread thread;
 	private boolean is_running = false;
-	GameWindow gameWindow;
-	Background gameBG;
+	private GameWindow gameWindow;
+	private Background gameBG;
 	
 	
 	public void start() {
 		is_running = true;
 		thread = new Thread(this, "Game");
 		thread.start();
-		
 	}
 	
-	public void load() {
+	private void load() {
 		Background.load();
 		Board.load();
 		Announcements.load();
@@ -33,7 +32,7 @@ public class Game implements Runnable {
 		Banner.load();
 	}
 	
-	public void initialize() {
+	private void initialize() {
 		gameWindow = new GameWindow();
 		gameBG = new Background();
 		gameStateManager = new StateManager();
@@ -51,10 +50,6 @@ public class Game implements Runnable {
 		double render_timer = 0.0;
 		double ups = 1000000000.0 / 60.0;
 		double fps = 1000000000.0 / 60.0;
-		int updates = 0;
-		int frames = 0;
-		
-		long last_report = System.currentTimeMillis();
 		
 		
 		while(is_running) {
@@ -67,24 +62,14 @@ public class Game implements Runnable {
 			
 			if(update_timer >= 1.0) {
 				update();
-				++updates;
 				--update_timer;
 			}
 			
 			if(render_timer >= 1.0) {
 				render();
-				++frames;
 				--render_timer;
 			}
 			
-			long now_report = System.currentTimeMillis();
-			
-			if(now_report - last_report >= 1000) {
-				last_report = now_report;
-				System.out.println("ups: " + updates + " fps: " + frames);
-				updates = 0;
-				frames = 0;
-			}
 			
 			is_running = !gameWindow.shouldCloseWindow() && !gameStateManager.isEmpty();
 		}

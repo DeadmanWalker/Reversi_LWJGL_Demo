@@ -9,7 +9,7 @@ import ui.Announcements;
 
 public class GameOver extends GameState {
 	
-	Board brd;
+	private Board brd;
 	
 	public GameOver(StateManager gsm, Board brd) {
 		super(gsm, true);
